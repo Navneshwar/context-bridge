@@ -21,7 +21,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    "click>=8.1",
+    "click>=8.5.0",
     "rich>=15.0.0",
     "pydantic>=2.13.5",
 ]
