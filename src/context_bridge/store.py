@@ -31,8 +31,12 @@ def _sanitize_fts5_query(query: str) -> str:
 
     sanitized = []
 
-    for token in tokens:
-        if token in {"AND", "OR", "NOT"}:
+    for index, token in enumerate(tokens):
+        if (
+            token in {"AND", "OR", "NOT"}
+            and index > 0
+            and index < len(tokens) - 1
+        ):
             sanitized.append(token)
         elif token.startswith('"') and token.endswith('"') and len(token) >= 2:
             phrase = token[1:-1].replace('"', '""')
@@ -142,7 +146,7 @@ class MemoryStore:
             JOIN memories_fts f ON m.id = f.rowid
             WHERE memories_fts MATCH ?
         """
-        params: list = [escaped_query]
+        params: list = [_sanitize_fts5_query(query.text)]
 
         if query.agent:
             sql += " AND m.source_agent = ?"
